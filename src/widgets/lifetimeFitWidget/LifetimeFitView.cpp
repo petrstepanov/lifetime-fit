@@ -13,7 +13,6 @@
 
 #include "LifetimeFitView.h"
 #include "LifetimeFitPresenter.h"
-#include "../../LinkDef.h"
 #include "../../model/Constants.h"
 #include "../importSpectrumWidget/ImportSpectrumView.h"
 #include "../importSpectrumWidget/ImportSourceSpectrumView.h"
@@ -189,9 +188,6 @@ void LifetimeFitView::initUI(){
     modelParamsFrame->AddFrame(numDampExponent, new TGLayoutHints(kLHintsNormal, 0, dx, 2*dy/5, 0));
     modelParamsFrame->AddFrame(new TGLabel(modelParamsFrame, "Damping Exp"), new TGLayoutHints(kLHintsNormal, 0, 3*dx, dy, 0));
 
-    //	hasOrtho = new TGCheckButton(modelParamsFrame, "Ortho Exps", -1);
-    //	modelParamsFrme->AddFrame(hasOrtho, new TGLayoutHints(kLHintsNormal, 0, 20, 4, 0));
-
     tabFit->AddFrame(modelParamsFrame, new TGLayoutHints(kLHintsExpandX, dx, dx, dy, dy));
 
     // Fit Button
@@ -218,33 +214,12 @@ void LifetimeFitView::initUI(){
 
     // Attach Tabs Widget
     tabsWidget->SetTab(0);
-    setTabEnabled(1, false);
-    setTabEnabled(2, false);
     tabsWidget->SetWidth(Constants::leftPanelWidth); // Resize(tabsWidget->GetDefaultSize());
     AddFrame(tabsWidget, new TGLayoutHints(kLHintsLeft | kLHintsTop | kLHintsExpandY, dx, dx, 2*dy, 2*dy));
 
     // Right panel
     TGVerticalFrame* frameRightVertical = new TGVerticalFrame(this);
     TGHorizontalFrame* frameExportButtons = new TGHorizontalFrame(frameRightVertical);
-
-//    numDisplayMin = new TGNumberEntry(frameExportButtons, 0, 6, -1, TGNumberFormat::kNESRealOne,
-//            TGNumberFormat::kNEAAnyNumber,
-//            TGNumberFormat::kNELLimitMinMax,
-//            -9999, 9999);
-//    numDisplayMax = new TGNumberEntry(frameExportButtons, 0, 6, -1, TGNumberFormat::kNESRealOne,
-//            TGNumberFormat::kNEAAnyNumber,
-//            TGNumberFormat::kNELLimitMinMax,
-//            -9999, 9999);
-//    btnApplyZoom = new TGTextButton(frameExportButtons, "Apply Display Range");
-//    btnApplyZoom->Connect("Clicked()", "LifetimeFitView", this, "onApplyZoomClicked()");
-//    btnResetZoom = new TGTextButton(frameExportButtons, "Reset");
-//    btnResetZoom->Connect("Clicked()", "LifetimeFitView", this, "onResetZoomClicked()");
-
-//    frameExportButtons->AddFrame(numDisplayMin, new TGLayoutHints(kLHintsLeft | kLHintsTop, 0, dx, 0, 0));  // left, right, top, bottom
-//    frameExportButtons->AddFrame(new TGLabel(frameExportButtons, "-"), new TGLayoutHints(kLHintsLeft | kLHintsTop, 0, dx, dy, 0));  // left, right, top, bottom
-//    frameExportButtons->AddFrame(numDisplayMax, new TGLayoutHints(kLHintsLeft | kLHintsTop, 0, dx, 0, 0));  // left, right, top, bottom
-//    frameExportButtons->AddFrame(btnApplyZoom, new TGLayoutHints(kLHintsLeft | kLHintsTop, dx, dx, 0, 0));  // left, right, top, bottom
-//    frameExportButtons->AddFrame(btnResetZoom, new TGLayoutHints(kLHintsLeft | kLHintsTop, 0, dx, 0, 0));  // left, right, top, bottom
 
     displayMin = new TGNumberEntry(frameExportButtons, 0, 5, -1, TGNumberFormat::kNESRealOne,
         TGNumberFormat::kNEAAnyNumber,
@@ -266,22 +241,6 @@ void LifetimeFitView::initUI(){
         -1000, 1000);
     displayMax->GetNumberEntry()->Connect("TextChanged(char*)", "LifetimeFitView", this, "onDisplayMaxChange(char*)");
     frameExportButtons->AddFrame(displayMax, new TGLayoutHints(kLHintsLeft | kLHintsTop, 0, dx, 0, 0));
-//    tbMin->AddText(0, "0.0");
-//    tbMax->AddText(0, "0.0");
-//
-//    char buf[32];
-//    sprintf(buf, "%.1f", zoomSlider->GetMinPosition());
-//    tbMin->Clear();
-//    tbMin->AddText(0, buf);
-//    sprintf(buf, "%.1f", zoomSlider->GetMaxPosition());
-//    tbMax->Clear();
-//    tbMax->AddText(0, buf);
-
-    // Save data file button
-//    btnSaveData = new TGTextButton(frameExportButtons, "Export Fit Data");
-//    btnSaveData->Connect("Clicked()", "LifetimeFitView", this, "onSaveDataClicked()");
-//    btnSaveData->SetEnabled(false);
-//    frameExportButtons->AddFrame(btnSaveData, new TGLayoutHints(kLHintsRight | kLHintsTop, 0, 0, 0, 0));  // left, right, top, bottom
 
     // Save image button
     btnSaveImage = new TGTextButton(frameExportButtons, "Save Image");
@@ -300,16 +259,11 @@ void LifetimeFitView::initUI(){
 
     AddFrame(frameRightVertical, new TGLayoutHints(kLHintsLeft | kLHintsTop | kLHintsExpandX | kLHintsExpandY, 0, 0, 0, dx));
 
-//    MapSubwindows();
-    // You should call, for example HideFrame(TGFrame *f), only after the frames have been laid out and the sub windows
-    // of the composite frame have been mapped via method MapSubwindows()
-//    setSourceContributionFrameVisible(kFALSE);
-
     // Plot Canvas Settings
     padData = new TPad("padData", "Pad for data", 0.0, 0.3, 1.0, 1.0, kWhite); // x_low, y_low, x_hi, y_hi
     padData->SetMargin(Constants::padMargin[0], Constants::padMargin[1], Constants::padMargin[2], Constants::padMargin[3]);
     padData->Draw();
-//
+
     padChi2 = new TPad("padChi2", "Pad for chi^2", 0.0, 0.0, 1.0, 0.3, kWhite);
     padChi2->SetMargin(Constants::padMargin[0], Constants::padMargin[1], Constants::padMargin[2], Constants::padMargin[3]);
     padChi2->Draw();
@@ -317,303 +271,6 @@ void LifetimeFitView::initUI(){
 
 // Calls from Presenter
 
-RooRealVarView* LifetimeFitView::getSourceContributionView() {
-    return sourceContributionView;
-}
-
-
-void LifetimeFitView::setTabEnabled(Int_t tabNumber, Bool_t isEnabled){
-    tabsWidget->SetEnabled(tabNumber, isEnabled);
-}
-
-Int_t LifetimeFitView::getFitMinValue(){
-    return numFitMin->GetNumber();
-}
-
-Int_t LifetimeFitView::getFitMaxValue(){
-    return numFitMax->GetNumber();
-}
-
-void LifetimeFitView::setFitMinMaxRange(Int_t min, Int_t max){
-    numFitMin->SetLimitValues(min,max);
-    numFitMax->SetLimitValues(min,max);
-}
-
-void LifetimeFitView::setFitMinMaxValues(Bool_t isTwoDetector){
-    if (isTwoDetector){
-        // Set fit values
-        Int_t leftLimitMin = TMath::Abs(numFitMin->GetNumMin());
-        Int_t rightLimitMax = TMath::Abs(numFitMax->GetNumMax());
-
-        Int_t limit = TMath::Min(leftLimitMin, rightLimitMax);
-        if (numFitMin->GetNumber() < -limit) numFitMin->SetNumber(-limit);
-        if (numFitMax->GetNumber() > limit) numFitMax->SetNumber(limit);
-    }
-    else {
-        numFitMin->SetNumber(496);
-        numFitMax->SetNumber(526);
-    }
-}
-
-void LifetimeFitView::setDisplayLimits(Float_t min, Float_t max) {
-    // Update slider position
-    zoomSlider->SetRange(min,max);
-    zoomSlider->SetPosition(min, max);
-    // Update text boxes' values
-    displayMin->SetLimitValues(min, max);
-    displayMin->SetNumber(min);
-    displayMax->SetLimitValues(min, max);
-    displayMax->SetNumber(max);
-}
-
-void LifetimeFitView::updateCanvasLimits(Double_t min, Double_t max) {
-//    std::cout << "(" << min << ", " << max << ")" << std::endl;
-    fitFrame->GetXaxis()->SetRangeUser(min, max);
-    chiFrame->GetXaxis()->SetRangeUser(min, max);
-    padData->Modified();
-    padData->Update();
-    padChi2->Modified();
-    padChi2->Update();
-}
-
-void LifetimeFitView::onDisplayMinChange(char* c) {
-    Double_t min = displayMin->GetNumber();
-    Double_t max = zoomSlider->GetMaxPosition();
-    zoomSlider->SetPosition(min, max);
-    updateCanvasLimits(min, max);
-}
-
-void LifetimeFitView::onDisplayMaxChange(char* c) {
-    Double_t min = zoomSlider->GetMinPosition();
-    Double_t max = displayMax->GetNumber();
-    zoomSlider->SetPosition(min, max);
-    updateCanvasLimits(min, max);
-}
-
-void LifetimeFitView::onSliderChange() {
-//   char buf[32];
-
-//   sprintf(buf, "%.1f", zoomSlider->GetMinPosition());
-//   tbMin->Clear();
-//   tbMin->AddText(0, buf);
-//   displayMin->SetCursorPosition(displayMin->GetCursorPosition());
-//   displayMin->Deselect();
-//   gClient->NeedRedraw(displayMin);
-
-    Double_t min = zoomSlider->GetMinPosition();
-    Double_t max = zoomSlider->GetMaxPosition();
-    displayMin->SetNumber(min);
-    displayMax->SetNumber(max);
-    updateCanvasLimits(zoomSlider->GetMinPosition(), zoomSlider->GetMaxPosition());
-}
-
-void LifetimeFitView::initRooPlots(RooPlot* fitFrame, RooPlot* chiFrame) {
-    this->fitFrame = fitFrame;
-    this->chiFrame = chiFrame;
-}
-
-Double_t LifetimeFitView::getSWidth(){
-    return numSWidth->GetNumber();
-}
-
-Double_t LifetimeFitView::getWWidth(){
-    return numWWidth->GetNumber();
-}
-
-Double_t LifetimeFitView::getWShift(){
-    return numWShift->GetNumber();
-}
-
-Int_t LifetimeFitView::getConvolutionType(){
-    return comboConvolutionType->GetSelected() - 1;
-}
-
-Bool_t LifetimeFitView::hasParabola(){
-    return checkboxHasParabola->IsOn();
-}
-
-Int_t LifetimeFitView::getNumGauss(){
-    return numGauss->GetNumber();
-}
-
-Int_t LifetimeFitView::getNumExp(){
-    return numExponent->GetNumber();
-}
-
-Int_t LifetimeFitView::getNumDampExp(){
-    return numDampExponent->GetNumber();
-}
-
-Double_t LifetimeFitView::getResolutionFWHM(){
-    return numResolutionFWHM->GetNumber();
-}
-
-Bool_t LifetimeFitView::isResolutionFixed() {
-    return checkboxResFixed->IsOn();
-}
-
-TPad* LifetimeFitView::getPadData() {
-    return padData;
-}
-
-TPad* LifetimeFitView::getPadChi2() {
-    return padChi2;
-}
-
-void LifetimeFitView::setToolbarEnabled(Bool_t isEnabled){
-//    btnApplyZoom->SetEnabled(isEnabled);
-//    btnResetZoom->SetEnabled(isEnabled);
-    btnSaveImage->SetEnabled(isEnabled);
-//    btnSaveData->SetEnabled(isEnabled);
-//    numDisplayMin->SetState(isEnabled);
-//    numDisplayMax->SetState(isEnabled);
-    displayMin->SetState(isEnabled);
-    displayMax->SetState(isEnabled);
-}
-
-void LifetimeFitView::setSourceContributionFrameVisible(Bool_t isVisible) {
-    if (isVisible) tabFit->ShowFrame(sourceContributionFrame);
-    else tabFit->HideFrame(sourceContributionFrame);
-}
-
-TCanvas* LifetimeFitView::getCanvas() {
-    return canvasPlot;
-}
-
-
-void LifetimeFitView::updateRegionLabels(Bool_t isTwoDetector){
-    lblRescale1->SetText(isTwoDetector ? "2 x " : " ");
-    lblRescale2->SetText(isTwoDetector ? "2 x " : " ");
-    lblRescale3->SetText(isTwoDetector ? "2 x " : " ");
-}
-
-void LifetimeFitView::displayFilename(TString* fileName) {
-    txtFitResult->AddLineFast("");
-    TString* onlyFileName = StringUtils::stripFileName(fileName);
-    txtFitResult->AddLineFast(Form("    %s", onlyFileName->Data()));
-}
-
-void LifetimeFitView::displayFitParameters(RooFitResult* fitResult) {
-    std::ostringstream os;
-    fitResult->printStream(os, fitResult->defaultPrintContents(""), fitResult->defaultPrintStyle(""));
-    std::istringstream iss(os.str());
-    std::string str;
-    for (int i = 0; i<4; i++){
-            std::getline(iss, str);
-    }
-    while (std::getline(iss, str)){
-            txtFitResult->AddLineFast(str.c_str());
-    }
-}
-
-void LifetimeFitView::displayIndirectParameters(std::list<Variable*> parameters) {
-    std::list<Variable*>::iterator iter;
-    txtFitResult->AddLineFast("  ------------------------------------------------");
-    for (iter = parameters.begin(); iter != parameters.end(); ++iter) {
-        Variable* v = (*iter);
-        TString str = (v->getError() == 0) ?
-            Form("%*s    %1.4e %s", 22, v->getDescription(), v->getValue(), v->getUnit()) :
-            Form("%*s    %1.4e (%1.2e) %s", 22, v->getDescription(), v->getValue(), v->getError(), v->getUnit());
-        txtFitResult->AddLineFast(str);
-    }
-}
-
-void LifetimeFitView::displayIntensities(std::list<std::pair<const char*, Double_t> > intensities) {
-    std::list<std::pair<const char*, Double_t>>::iterator iter;
-    txtFitResult->AddLineFast("  ------------------------------------------------");
-    for (iter = intensities.begin(); iter != intensities.end(); ++iter) {
-        std::pair<const char*, Double_t> p = (*iter);
-        TString str = Form("%*s    %f %c", 22, p.first, p.second*100, '%');
-        txtFitResult->AddLineFast(str);
-    }
-}
-
-void LifetimeFitView::displayChi2(Double_t sumChi2, Int_t freeParameters, Int_t degreesFreedom) {
-    txtFitResult->AddLineFast("  ------------------------------------------------");
-    Double_t chi2ByFreePars = sumChi2 / (Double_t)(degreesFreedom);
-    Double_t chi2Err = sqrt((double)2 * freeParameters) / degreesFreedom;
-    TString strChiInt = Form("%*s   %2.1f/%d = %1.2f +/- %1.2f", 22, "chi^2/N", sumChi2, degreesFreedom, chi2ByFreePars, chi2Err);
-    txtFitResult->AddLineFast(strChiInt);
-}
-
-void LifetimeFitView::displaySW(std::pair<Double_t, Double_t> sValueError, std::pair<Double_t, Double_t> wValueError) {
-    txtFitResult->AddLineFast("  ------------------------------------------------");
-    TString strS = Form("%*s    %1.4e +/-  %1.2e", 22, "S Parameter", sValueError.first, sValueError.second);
-    txtFitResult->AddLineFast(strS);
-    TString strW = Form("%*s    %1.4e +/-  %1.2e", 22, "W Parameter", wValueError.first, wValueError.second);
-    txtFitResult->AddLineFast(strW);
-    txtFitResult->AddLineFast("  ------------------------------------------------");
-    // Update output
-    txtFitResult->Update();
-    txtFitResult->ScrollUp(1000);
-}
-
-void LifetimeFitView::updateCanvas() {
-    canvasPlot->Update();
-}
-
-// Calls to Presenter
-void LifetimeFitView::onNumFitMinChanged(){
-    std::cout << "LifetimeFitView::onNumFitMinChanged()" << std::endl;
-}
-
-void LifetimeFitView::onNumFitMaxChanged(){
-    std::cout << "LifetimeFitView::onNumFitMaxChanged()" << std::endl;
-}
-
-void LifetimeFitView::onFitSpectrumClicked(){
-    LifetimeFitPresenter* presenter = getPresenter();
-    presenter->onFitSpectrumClicked();
-}
-
-void LifetimeFitView::onApplyZoomClicked(){
-    std::cout << "LifetimeFitView::onApplyZoomClicked()" << std::endl;
-}
-
-void LifetimeFitView::onResetZoomClicked(){
-    std::cout << "LifetimeFitView::onResetZoomClicked()" << std::endl;
-}
-
-void LifetimeFitView::onSaveResultsClicked() {
-    LifetimeFitPresenter* presenter = getPresenter();
-    presenter->onSaveResultsClicked();
-}
-
-void LifetimeFitView::onClearResultsClicked() {
-    LifetimeFitPresenter* presenter = getPresenter();
-    presenter->onClearResultsClicked();
-}
-
-void LifetimeFitView::saveFitResults(TString* fileName) {
-    Bool_t ok = txtFitResult->SaveFile(fileName->Data());
-    UiHelper* uiHelper = UiHelper::getInstance();
-    uiHelper->showOkDialog(ok ? "Results saved successfully" : "Error saving results file");
-}
-
-void LifetimeFitView::clearFitResults() {
-    txtFitResult->SetText(new TGText(""));
-    TGLongPosition* pos = new TGLongPosition(0, 0);
-    txtFitResult->ScrollToPosition(*pos);
-}
-
-
-//void LifetimeFitView::onSaveDataClicked(){
-//    std::cout << "LifetimeFitView::onSaveDataClicked()" << std::endl;
-//}
-
-void LifetimeFitView::onSaveImageClicked(){
-    LifetimeFitPresenter* presenter = getPresenter();
-    presenter->onSaveImageClicked();
-}
-
 LifetimeFitView::~LifetimeFitView() {
     Cleanup();
-    // delete numPeakPosition;
-    // delete numFitMin;
-    // delete numFitMax;
-    // delete lblRescale1;
-    // delete lblRescale2;
-    // delete lblRescale3;
-    // delete numSWidth;
-
 }

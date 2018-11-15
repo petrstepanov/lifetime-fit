@@ -5,11 +5,10 @@
  */
 
 /* 
- * File:   StructParams.cpp
+ * File:   HistogramImportedEvent.cpp
  * Author: petrstepanov
  * 
- * Created on November 14, 2016, 4:12 PM
+ * Created on October 15, 2017, 10:57 PM
  */
 
-#include "StructParams.h"
-
+#include "HistogramImportedEvent.h"

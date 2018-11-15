@@ -4,10 +4,10 @@
  * and open the template in the editor.
  */
 
-/* 
+/*
  * File:   MainView.cpp
  * Author: petrstepanov
- * 
+ *
  * Created on October 15, 2017, 1:47 AM
  */
 
@@ -18,27 +18,33 @@
 #include <iostream>
 
 MainView::MainView(const TGWindow* w) : TGMainFrame(w, Constants::windowWidth, Constants::windowHeight) {
-    SetCleanup(kDeepCleanup);
-    SetWindowName(Constants::applicationName);
-    Connect("CloseWindow()", "TApplication", gApplication, "Terminate()");
-    DontCallClose();
-    // Pass TGMainFrame to UiHelper for centering the dialogs
-    UiHelper* uiHelper = UiHelper::getInstance();
-    uiHelper->setMainFrame(this);
+  // Can cause segmentation violation https://root.cern.ch/root/html534/TGCompositeFrame.html#TGCompositeFrame:SetCleanup
+  // SetCleanup(kDeepCleanup);
+  // Set a name to the main frame
+  SetWindowName(Constants::applicationName);
+  // Close on Alt+F4
+  Connect("CloseWindow()", "TApplication", gApplication, "Terminate()");
+  DontCallClose();
+  // Pass TGMainFrame to UiHelper for centering the dialogs
+  UiHelper* uiHelper = UiHelper::getInstance();
+  uiHelper->setMainFrame(this);
 }
 
 MainView::~MainView(){
-    Cleanup();
+  Cleanup();
+  delete this;
 }
 
 void MainView::mapAndResize(){
-    MapSubwindows();
-    Resize(GetDefaultSize());
-    Resize(Constants::windowWidth, Constants::windowHeight);
-    MapWindow();
+  // Map all subwindows of main frame
+  MapSubwindows();
+  // Initialize the layout algorithm
+  Resize(GetDefaultSize());
+  Resize(Constants::windowWidth, Constants::windowHeight);
+  // Map main frame
+  MapWindow();
 }
 
-//void MainView::CloseWindow(){
-//    delete this;
-//    gApplication->Terminate(0);
-//}
+void MainView::CloseWindow(){
+  gApplication->Terminate(0);
+}

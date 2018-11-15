@@ -32,10 +32,8 @@
 #include <TGDoubleSlider.h>
 #include <TGTextEntry.h>
 #include <TGTextBuffer.h>
-#include "../../util/Variable.h"
 #include "../AbstractView.h"
 #include "LifetimeFitPresenter.h"
-#include "../rooRealVarWidget/RooRealVarView.h"
 
 class LifetimeFitPresenter;
 
@@ -43,62 +41,9 @@ class LifetimeFitView : public AbstractView<LifetimeFitPresenter> {
   protected:
     void initUI();
 
-//      #if defined(__ROOTCLING__)
-//	  ClassDef(LifetimeFitFrame, 1);
-//      #endif
-
   private:
     TGTextButton* btn;
     TGTab* tabsWidget;
-    TGNumberEntry* numPeakPosition;
-    TGCompositeFrame *tabFit;
-
-    // Fit and W,S ranges
-    TGNumberEntry* numFitMin;
-    TGNumberEntry* numFitMax;
-    TGLabel* lblRescale1;
-    TGLabel* lblRescale2;
-    TGLabel* lblRescale3;
-    TGNumberEntry* numSWidth;
-    TGNumberEntry* numWWidth;
-    TGNumberEntry* numWShift;
-
-    // Convolution parameters
-    TGComboBox* comboConvolutionType;
-    TGNumberEntry* numResolutionFWHM;
-    TGCheckButton* checkboxResFixed;
-
-    // Source contribution view
-    RooRealVarView* sourceContributionView;
-    TGVerticalFrame* sourceContributionFrame;
-
-    // Fitting function
-    TGCheckButton* checkboxHasParabola;
-    TGNumberEntry* numGauss;
-    TGNumberEntry* numExponent;
-    TGNumberEntry* numDampExponent;
-
-    // Fit
-    TGTextButton* btnFitSpectrum;
-    TGTextEdit* txtFitResult;
-    TGTextButton* btnClearResult;
-    TGTextButton* btnSaveResult;
-
-    // Plot and display params
-//    TGTextButton* btnSaveData;
-    TGTextButton* btnSaveImage;
-    TCanvas* canvasPlot;
-    TGDoubleHSlider* zoomSlider;
-    TGNumberEntry* displayMin;
-    TGNumberEntry* displayMax;
-//    TGTextBuffer* tbMin;
-//    TGTextBuffer* tbMax;
-
-//    TGNumberEntry* numDisplayMin;
-//    TGNumberEntry* numDisplayMax;
-//    TGCheckButton* hasOrtho;
-//    TGTextButton*  btnApplyZoom;
-//    TGTextButton*  btnResetZoom;
     RooPlot* fitFrame;
     RooPlot* chiFrame;
     TPad* padData;
@@ -112,60 +57,10 @@ class LifetimeFitView : public AbstractView<LifetimeFitPresenter> {
     LifetimeFitPresenter* instantinatePresenter();
 
     // Calls from Presenter
-    RooRealVarView* getSourceContributionView();
-    void setTabEnabled(Int_t, Bool_t);
-    Int_t getFitMinValue();
-    void setFitMinMaxRange(Int_t min, Int_t max);
-    void setFitMinMaxValues(Bool_t isTwoDetector);
-    Int_t getFitMaxValue();
-    Double_t getSWidth();
-    Double_t getWWidth();
-    Double_t getWShift();
-    Int_t getConvolutionType();
-    Bool_t hasParabola();
-    Int_t getNumGauss();
-    Int_t getNumExp();
-    Int_t getNumDampExp();
-    Double_t getResolutionFWHM();
-    Bool_t isResolutionFixed();
-    TPad* getPadData();
-    TPad* getPadChi2();
-    void setToolbarEnabled(Bool_t isEnabled);
-    void updateRegionLabels(Bool_t isTwoDetector);
-    void displayFilename(TString* fileName);
-    void displayFitParameters(RooFitResult* fitResult);
-    void displayIndirectParameters(std::list<Variable*> parameters);
-    void displayIntensities(std::list<std::pair<const char*, Double_t>> intensities);
-    void displayChi2(Double_t sumChi2, Int_t freeParameters, Int_t degreesFreedom);
-    void displaySW(std::pair<Double_t, Double_t> sValueError, std::pair<Double_t, Double_t> wValueError);
-    void updateCanvas();
-    void setDisplayLimits(Float_t min, Float_t max);
-    TCanvas* getCanvas();
-    void saveFitResults(TString* fileName);
-    void clearFitResults();
 
     // Calls to Presenter
-    void onNumFitMinChanged();
-    void onNumFitMaxChanged();
-    void onFitSpectrumClicked();
-    void onApplyZoomClicked();
-    void onResetZoomClicked();
-//    void onSaveDataClicked();
-    void onSaveImageClicked();
-    void onSaveResultsClicked();
-    void onClearResultsClicked();
 
-    //    void CloseWindow();
-    void initRooPlots(RooPlot* fitFrame, RooPlot* chiFrame);
-
-    // Update display range functions
-    void onDisplayMinChange(char* c);
-    void onDisplayMaxChange(char* c);
-    void onSliderChange();
-    void updateCanvasLimits(Double_t min, Double_t max);
-    void setSourceContributionFrameVisible(Bool_t isVisible);
-
-    ClassDef(LifetimeFitView,0);
+    ClassDef(LifetimeFitView, 0);
 };
 
 #endif /* LifetimeFitVIEW_H */

@@ -18,11 +18,7 @@
 #include "../../event/EventBus.h"
 #include "../../event/HandlerRegistration.h"
 #include "../../util/RootHelper.h"
-#include "../../util/HistProcessor.h"
-#include "../../util/GraphicsHelper.h"
-#include "../../util/StringUtils.h"
 #include "../../util/UiHelper.h"
-#include "../../roofit/CompositeModelProvider.h"
 #include "../../model/Constants.h"
 #include <RooFit.h>
 #include <RooDataHist.h>
